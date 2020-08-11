@@ -5,6 +5,7 @@ import Img from 'gatsby-image';
 
 import { Container } from '@components/global';
 import ExternalLink from '@common/ExternalLink';
+import { Link } from '@reach/router';
 
 const Header = () => (
   <StaticQuery
@@ -12,7 +13,7 @@ const Header = () => (
       query {
         art_build: file(
           sourceInstanceName: { eq: "art" }
-          name: { eq: "build" }
+          name: { eq: "focus-wave" }
         ) {
           childImageSharp {
             fluid(maxWidth: 1400) {
@@ -31,17 +32,15 @@ const Header = () => (
             </Art>
             <Text>
               <h1>
-                Fast in
+                Parents,
                 <br />
-                every way
+                children,
                 <br />
-                that matters
+                virtual learning.
               </h1>
               <br />
               <p>
-                <StyledExternalLink href="https://github.com/ajayns/gatsby-absurd">
-                  Check out source &nbsp;&#x2794;
-                </StyledExternalLink>
+                <Link to="/activities/home">Sign in &nbsp;&#x2794;</Link>
               </p>
             </Text>
           </Grid>
@@ -53,10 +52,10 @@ const Header = () => (
 
 const HeaderWrapper = styled.header`
   background-color: ${props => props.theme.color.primary};
-  padding-top: 96px;
+  padding-top: 66px;
 
   @media (max-width: ${props => props.theme.screen.md}) {
-    padding-top: 128px;
+    padding-top: 98px;
   }
 `;
 
@@ -98,7 +97,7 @@ const Text = styled.div`
   }
 `;
 
-const StyledExternalLink = styled(ExternalLink)`
+const StyledExternalLink = styled(Link)`
   color: inherit;
   text-decoration: none;
 

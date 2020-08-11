@@ -2,13 +2,19 @@ import React from 'react';
 import Helmet from 'react-helmet';
 
 const SEO_DATA = {
-  description: 'An absurd gatsby starter',
-  title: 'Absurd',
+  description: 'Learn, Plan, and Share with Focus Otter',
+  title: 'Focus Otter',
   url: '',
-  author: 'ajayns',
-  keywords: ['gatsby', 'site', 'absurd'],
+  author: 'mtliendo',
+  keywords: [
+    'gatsby',
+    'site',
+    'focus otter',
+    'learning board',
+    'virtual learning',
+  ],
   img: '',
-  twitterId: '@ajayns_',
+  twitterId: '@mtliendo',
   facebookId: '',
 };
 

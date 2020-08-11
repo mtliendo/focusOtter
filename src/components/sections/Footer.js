@@ -7,21 +7,16 @@ import { Container } from '@components/global';
 import ExternalLink from '@common/ExternalLink';
 
 import GithubIcon from '@static/icons/github.svg';
-import InstagramIcon from '@static/icons/instagram.svg';
 import TwitterIcon from '@static/icons/twitter.svg';
 
 const SOCIAL = [
   {
     icon: GithubIcon,
-    link: 'https://github.com/ajayns/gatsby-absurd',
-  },
-  {
-    icon: InstagramIcon,
-    link: 'https://instagram.com/ajay_ns',
+    link: 'https://github.com/mtliendo/focus-otter',
   },
   {
     icon: TwitterIcon,
-    link: 'https://twitter.com/ajayns08',
+    link: 'https://twitter.com/mtliendo',
   },
 ];
 
@@ -29,9 +24,9 @@ const Footer = () => (
   <StaticQuery
     query={graphql`
       query {
-        art_pot: file(
+        focus_otter_down: file(
           sourceInstanceName: { eq: "art" }
-          name: { eq: "customers_pot" }
+          name: { eq: "focus-otter-down" }
         ) {
           childImageSharp {
             fluid(maxWidth: 960) {
@@ -45,19 +40,23 @@ const Footer = () => (
       <React.Fragment>
         <Art>
           <Img
-            fluid={data.art_pot.childImageSharp.fluid}
+            fluid={data.focus_otter_down.childImageSharp.fluid}
             style={{ width: 480, maxWidth: '100%', marginBottom: -16 }}
           />
         </Art>
         <FooterWrapper>
           <StyledContainer>
             <Copyright>
-              <h2>Absurd</h2>
+              <h2>Focus Otter</h2>
               <span>
                 Illustrations by
                 {` `}
-                <ExternalLink href="https://twitter.com/diana_valeanu">
+                <ExternalLink href="https://twitter.com/diana_aleanu">
                   @diana_valeanu
+                </ExternalLink>
+                {` and Focus Otter by `}
+                <ExternalLink href="https://www.istockphoto.com/portfolio/hachionora?assettype=image&mediatype=illustration&sort=best">
+                  Hachio Nora
                 </ExternalLink>
               </span>
             </Copyright>

@@ -54,18 +54,6 @@ const GlobalStyles = createGlobalStyle`
       ${props => props.theme.font_size.small};
     }
   }
-
-  button {
-    border: none;
-    background: none;
-    outline: none;
-    padding: 0;
-    cursor: pointer;
-  }
-
-  a {
-    cursor: pointer;
-  }
 `;
 
 export default GlobalStyles;
