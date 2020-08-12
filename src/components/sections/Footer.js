@@ -12,7 +12,7 @@ import TwitterIcon from '@static/icons/twitter.svg';
 const SOCIAL = [
   {
     icon: GithubIcon,
-    link: 'https://github.com/mtliendo/focus-otter',
+    link: 'https://github.com/mtliendo/focusOtter',
   },
   {
     icon: TwitterIcon,

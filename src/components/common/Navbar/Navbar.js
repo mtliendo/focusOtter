@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-
+import React, { useState } from 'react';
+import { Container } from '@components/global';
 import { Auth } from 'aws-amplify';
 import { Link } from '@reach/router';
 import { Button } from 'antd';
+import { ReactComponent as MenuIcon } from '@static/icons/menu.svg';
 import {
   Nav,
   NavItem,
@@ -10,51 +11,62 @@ import {
   StyledContainer,
   NavListWrapper,
   MobileMenu,
-  Mobile, // render this component to inherit media-queries
+  Mobile, // render component to inherit media-queries
 } from './style';
 
-class Navbar extends Component {
-  // getNavAnchorLink = item => (
-  //   <AnchorLink href={`#${item.toLowerCase()}`} onClick={this.closeMobileMenu}>
-  //     {item}
-  //   </AnchorLink>
-  // );
+const Navbar = props => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  handleAuthButtonClick = async () => {
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(prevState => !prevState);
+  };
+
+  const handleAuthButtonClick = async () => {
     console.log('called');
     await Auth.signOut();
   };
 
-  getNavList = ({ mobile = false }) => (
-    <NavListWrapper mobile={mobile}></NavListWrapper>
+  const getNavList = ({ mobile = false }) => (
+    <NavListWrapper mobile={mobile}>
+      <Link
+        style={{ textDecoration: 'none', color: 'black' }}
+        to="/activities/home"
+      >
+        Activities List
+      </Link>
+      <Button
+        type="text"
+        style={{ color: 'black' }}
+        onClick={handleAuthButtonClick}
+      >
+        Sign Out
+      </Button>
+    </NavListWrapper>
   );
 
-  render() {
-    return (
-      <Nav {...this.props}>
-        <StyledContainer>
-          <Brand>
-            <Link style={{ textDecoration: 'none', color: 'black' }} to="/">
-              Focus Otter
-            </Link>
-          </Brand>
-          <Link
-            style={{ textDecoration: 'none', color: 'black' }}
-            to="/activities/home"
-          >
-            Activities List
+  return (
+    <Nav {...props}>
+      <StyledContainer>
+        <Brand>
+          <Link style={{ textDecoration: 'none', color: 'black' }} to="/">
+            Focus Otter
           </Link>
-          <Button
-            type="text"
-            style={{ color: 'black' }}
-            onClick={this.handleAuthButtonClick}
-          >
-            Sign Out
-          </Button>
-        </StyledContainer>
-      </Nav>
-    );
-  }
-}
+        </Brand>
+        {props.username && `Welcome back, ${props.username}!`}
+        <Mobile>
+          <button onClick={toggleMobileMenu} style={{ color: 'black' }}>
+            <MenuIcon />
+          </button>
+        </Mobile>
+        <Mobile hide>{getNavList({})}</Mobile>
+        <Mobile>
+          {mobileMenuOpen && (
+            <MobileMenu>{getNavList({ mobile: true })}</MobileMenu>
+          )}
+        </Mobile>
+      </StyledContainer>
+    </Nav>
+  );
+};
 
 export default Navbar;

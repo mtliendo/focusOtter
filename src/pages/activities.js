@@ -2,7 +2,7 @@ import React from 'react';
 import { Router } from '@reach/router';
 import { Section, Container } from '@components/global';
 import styled from 'styled-components';
-import { AmplifyAuthenticator } from '@aws-amplify/ui-react';
+import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
 
 import Layout from '@common/Layout';
@@ -16,22 +16,22 @@ import NewActivity from '../client-side-pages/NewActivity';
 
 const initialActivityData = [
   {
-    id: 1,
+    id: '1',
     category: 'Math',
     title: 'This is your very first activity🎉',
     description:
       'This is a description of your first activity. To get started, go ahead and click the edit button ➡️',
-    timeStart: '2:30',
-    timeEnd: '3:30',
+    timeStart: 1597208853,
+    duration: 900000,
   },
   {
-    id: 2,
+    id: '2',
     category: 'Science',
     title: 'This is your second activity🎉',
     description:
       'This is a description of your first activity. To get started, go ahead and click the edit button ➡️',
-    timeStart: '3:30',
-    timeEnd: '4:30',
+    timeStart: 1597209853,
+    duration: 7200000,
   },
 ];
 
@@ -52,9 +52,8 @@ const App = ({ navigate }) => {
   };
 
   const handleEditActivity = selectedActivity => {
-    console.log({ selectedActivity });
     const updatedActivityData = activityData.map(activityItem => {
-      return activityItem.id.toString() === selectedActivity.id
+      return activityItem.id === selectedActivity.id
         ? { ...selectedActivity }
         : activityItem;
     });
@@ -63,9 +62,14 @@ const App = ({ navigate }) => {
     navigate('/activities/home');
   };
 
+  const handleDeleteActivity = updatedActivityList => {
+    setActivityData(updatedActivityList);
+    navigate('/activities/home');
+  };
+
   return authState === AuthState.SignedIn && user ? (
     <Layout>
-      <Navbar />
+      <Navbar username={user.username} />
       <Section>
         <Container>
           <Router>
@@ -73,6 +77,7 @@ const App = ({ navigate }) => {
             <EditActivity
               path="/activities/edit/:activityID"
               onEditActivity={handleEditActivity}
+              onDeleteActivity={handleDeleteActivity}
               activityList={activityData}
             />
             <NewActivity
@@ -90,7 +95,16 @@ const App = ({ navigate }) => {
     <Layout>
       <Navbar />
       <CenteredAuthComponent>
-        <AmplifyAuthenticator />
+        <AmplifyAuthenticator>
+          <AmplifySignUp
+            slot="sign-up"
+            formFields={[
+              { type: 'username' },
+              { type: 'password' },
+              { type: 'email' },
+            ]}
+          />
+        </AmplifyAuthenticator>
       </CenteredAuthComponent>
       <Footer />
     </Layout>

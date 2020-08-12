@@ -1,15 +1,35 @@
 import React from 'react';
 import { ActivityForm } from '../components/sections/ActivityForm';
-import { Typography } from 'antd';
+import { Typography, notification } from 'antd';
 
-function EditActivity({ onEditActivity, activityID, activityList }) {
+function EditActivity({
+  onEditActivity,
+  activityID,
+  activityList,
+  onDeleteActivity,
+}) {
   const selectedActivity = activityList.find(
-    activityItem => activityItem.id.toString() === activityID
+    activityItem => activityItem.id === activityID
   );
 
+  console.log({ activityID });
+  console.log({ activityList });
+
   const onFinish = values => {
-    console.log(values);
-    onEditActivity({ id: activityID, ...values });
+    onEditActivity({
+      id: activityID,
+      ...values,
+      timeStart: values.time.unix(),
+      duration: Number(values.duration),
+    });
+  };
+
+  const onDelete = () => {
+    const updatedActivityList = activityList.filter(
+      activityItem => activityItem.id !== activityID
+    );
+    notification.success({ message: 'Activity deleted ✅' });
+    onDeleteActivity(updatedActivityList);
   };
 
   return (
@@ -20,7 +40,9 @@ function EditActivity({ onEditActivity, activityID, activityList }) {
       <ActivityForm
         onFinish={onFinish}
         onFinishMessage="🚀 Activity edited!"
+        onDelete={onDelete}
         selectedActivity={selectedActivity}
+        isEditing
       />
     </>
   );

@@ -5,8 +5,12 @@ import { ActivityForm } from '../components/sections/ActivityForm';
 
 function NewActivity({ onNewActivity }) {
   const onFinish = values => {
-    console.log(values);
-    onNewActivity({ id: 4, ...values });
+    onNewActivity({
+      id: 4,
+      ...values,
+      timeStart: values.time.unix(),
+      duration: Number(values.duration),
+    });
   };
 
   return (

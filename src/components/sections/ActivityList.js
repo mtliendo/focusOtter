@@ -2,6 +2,8 @@ import React from 'react';
 import { List, Avatar, Tag } from 'antd';
 import { Link } from '@reach/router';
 import { categoryMap } from '../../utils/categoryMap';
+import moment from 'moment';
+import { generateDisplayNameFromDuration } from '../../utils/durationMap';
 
 export function ActivityList(props) {
   return (
@@ -21,7 +23,11 @@ export function ActivityList(props) {
             // avatar={
             //   <Avatar src="https://ouch-cdn.icons8.com/preview/216/3ccb496a-e253-45ad-a3b2-bada05d0d7e5.png" />
             // }
-            title={`${item.title} at ${item.timeStart}`}
+            title={`${item.title} at ${moment
+              .unix(item.timeStart)
+              .format('h:mm')} for ${generateDisplayNameFromDuration(
+              item.duration
+            )}`}
             description={item.description}
           />
         </List.Item>
