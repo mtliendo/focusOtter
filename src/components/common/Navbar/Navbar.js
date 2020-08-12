@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import AnchorLink from 'react-anchor-link-smooth-scroll';
-import Scrollspy from 'react-scrollspy';
+import { Auth } from 'aws-amplify';
 import { Link } from '@reach/router';
-import { Container } from '@components/global';
+import { Button } from 'antd';
 import {
   Nav,
   NavItem,
@@ -10,53 +10,27 @@ import {
   StyledContainer,
   NavListWrapper,
   MobileMenu,
-  Mobile,
+  Mobile, // render this component to inherit media-queries
 } from './style';
 
-import { ReactComponent as MenuIcon } from '@static/icons/menu.svg';
-
-const NAV_ITEMS = ['About'];
-
 class Navbar extends Component {
-  state = {
-    mobileMenuOpen: false,
-  };
+  // getNavAnchorLink = item => (
+  //   <AnchorLink href={`#${item.toLowerCase()}`} onClick={this.closeMobileMenu}>
+  //     {item}
+  //   </AnchorLink>
+  // );
 
-  toggleMobileMenu = () => {
-    this.setState(prevState => ({ mobileMenuOpen: !prevState.mobileMenuOpen }));
+  handleAuthButtonClick = async () => {
+    console.log('called');
+    await Auth.signOut();
   };
-
-  closeMobileMenu = () => {
-    if (this.state.mobileMenuOpen) {
-      this.setState({ mobileMenuOpen: false });
-    }
-  };
-
-  getNavAnchorLink = item => (
-    <AnchorLink href={`#${item.toLowerCase()}`} onClick={this.closeMobileMenu}>
-      {item}
-    </AnchorLink>
-  );
 
   getNavList = ({ mobile = false }) => (
-    <NavListWrapper mobile={mobile}>
-      <Scrollspy
-        items={NAV_ITEMS.map(item => item.toLowerCase())}
-        currentClassName="active"
-        mobile={mobile}
-        offset={-64}
-      >
-        {NAV_ITEMS.map(navItem => (
-          <NavItem key={navItem}>{this.getNavAnchorLink(navItem)}</NavItem>
-        ))}
-      </Scrollspy>
-    </NavListWrapper>
+    <NavListWrapper mobile={mobile}></NavListWrapper>
   );
 
   render() {
-    const { mobileMenuOpen } = this.state;
-
-    return this.props.showAbout ? (
+    return (
       <Nav {...this.props}>
         <StyledContainer>
           <Brand>
@@ -64,30 +38,19 @@ class Navbar extends Component {
               Focus Otter
             </Link>
           </Brand>
-          <Mobile>
-            <button onClick={this.toggleMobileMenu} style={{ color: 'black' }}>
-              <MenuIcon />
-            </button>
-          </Mobile>
-
-          <Mobile hide>{this.getNavList({})}</Mobile>
-        </StyledContainer>
-        <Mobile>
-          {mobileMenuOpen && (
-            <MobileMenu>
-              <Container>{this.getNavList({ mobile: true })}</Container>
-            </MobileMenu>
-          )}
-        </Mobile>
-      </Nav>
-    ) : (
-      <Nav {...this.props}>
-        <StyledContainer>
-          <Brand>
-            <Link style={{ textDecoration: 'none', color: 'black' }} to="/">
-              Focus Otter
-            </Link>
-          </Brand>
+          <Link
+            style={{ textDecoration: 'none', color: 'black' }}
+            to="/activities/home"
+          >
+            Activities List
+          </Link>
+          <Button
+            type="text"
+            style={{ color: 'black' }}
+            onClick={this.handleAuthButtonClick}
+          >
+            Sign Out
+          </Button>
         </StyledContainer>
       </Nav>
     );
