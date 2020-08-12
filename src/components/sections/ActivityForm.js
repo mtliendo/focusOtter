@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Form, Input, Button, Select, TimePicker, notification } from 'antd';
 import { activityCategories } from '../../utils/categoryMap';
-import { ToastContainer, toast } from 'react-toastify';
 import { Link } from '@reach/router';
 
 export const ActivityForm = ({
@@ -18,7 +17,7 @@ export const ActivityForm = ({
       description: selectedActivity.description,
       category: selectedActivity.category,
     });
-  }, []);
+  }, [form, selectedActivity]);
   const layout = {
     labelCol: {
       span: 8,
@@ -147,7 +146,6 @@ export const ActivityForm = ({
           <Link to="/activities/home">Back to activities list</Link>
         </Form.Item>
       </Form>
-      <ToastContainer />
     </>
   );
 };

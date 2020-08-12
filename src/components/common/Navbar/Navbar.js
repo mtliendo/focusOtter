@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import AnchorLink from 'react-anchor-link-smooth-scroll';
+
 import { Auth } from 'aws-amplify';
 import { Link } from '@reach/router';
 import { Button } from 'antd';

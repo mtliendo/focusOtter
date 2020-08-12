@@ -8,7 +8,6 @@ import Amplify from 'aws-amplify';
 import Auth from '@aws-amplify/auth';
 import { setUser } from './src/utils/auth';
 import config from './src/aws-exports';
-import 'react-toastify/dist/ReactToastify.css';
 
 Amplify.configure(config);
 

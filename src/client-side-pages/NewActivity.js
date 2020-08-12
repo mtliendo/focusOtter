@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography, Divider } from 'antd';
+import { Typography } from 'antd';
 
 import { ActivityForm } from '../components/sections/ActivityForm';
 
