@@ -6,7 +6,6 @@ import moment from 'moment';
 import { generateDisplayNameFromDuration } from '../../utils/durationMap';
 
 export function ActivityList(props) {
-  console.log(props.data);
   return (
     <List
       itemLayout="horizontal"
@@ -28,9 +27,11 @@ export function ActivityList(props) {
           ]}
         >
           <List.Item.Meta
-            // avatar={
-            //   <Avatar src="https://ouch-cdn.icons8.com/preview/216/3ccb496a-e253-45ad-a3b2-bada05d0d7e5.png" />
-            // }
+            avatar={
+              <Avatar style={{ color: '#f56a00', backgroundColor: '#fde3cf' }}>
+                S
+              </Avatar>
+            }
             title={`${item.title} at ${moment
               .unix(item.timeStart)
               .format('h:mm')} for ${generateDisplayNameFromDuration(

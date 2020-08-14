@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container } from '@components/global';
 import { Auth } from 'aws-amplify';
-import { Link } from '@reach/router';
+import { Link, navigate } from '@reach/router';
 import { Button } from 'antd';
 import { ReactComponent as MenuIcon } from '@static/icons/menu.svg';
 import {
@@ -22,8 +22,7 @@ const Navbar = props => {
   };
 
   const handleAuthButtonClick = async () => {
-    console.log('called');
-    await Auth.signOut();
+    props.user.username ? await Auth.signOut() : navigate('/activities/home');
   };
 
   const getNavList = ({ mobile = false }) => (
@@ -39,7 +38,7 @@ const Navbar = props => {
         style={{ color: 'black' }}
         onClick={handleAuthButtonClick}
       >
-        Sign Out
+        {!props.user.username ? 'Sign In' : 'Sign Out'}
       </Button>
     </NavListWrapper>
   );
@@ -52,7 +51,7 @@ const Navbar = props => {
             Focus Otter
           </Link>
         </Brand>
-        {props.username && `Welcome back, ${props.username}!`}
+        {props.user.username && `Welcome back, ${props.user.username}!`}
         <Mobile>
           <button onClick={toggleMobileMenu} style={{ color: 'black' }}>
             <MenuIcon />

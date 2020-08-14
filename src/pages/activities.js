@@ -37,9 +37,9 @@ const initialActivityData = [
 
 const App = ({ navigate }) => {
   const [authState, setAuthState] = React.useState();
-  const [user, setUser] = React.useState();
+  const [user, setUser] = React.useState({});
   const [activityData, setActivityData] = React.useState(initialActivityData);
-  const [sortedActivityData, setSortedActivityData] = React.useState(null);
+  const [sortedActivityData, setSortedActivityData] = React.useState();
 
   useEffect(() => {
     const sortedActivities = [...activityData].sort(
@@ -80,7 +80,7 @@ const App = ({ navigate }) => {
 
   return authState === AuthState.SignedIn && user ? (
     <Layout>
-      <Navbar username={user.username} />
+      <Navbar user={user} />
       <Section>
         <Container>
           <Router>
@@ -104,7 +104,7 @@ const App = ({ navigate }) => {
     </Layout>
   ) : (
     <Layout>
-      <Navbar />
+      <Navbar user={{}} />
       <CenteredAuthComponent>
         <AmplifyAuthenticator>
           <AmplifySignUp

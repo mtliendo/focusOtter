@@ -4,8 +4,8 @@ import { StaticQuery, graphql } from 'gatsby';
 import Img from 'gatsby-image';
 
 import { Container } from '@components/global';
-import ExternalLink from '@common/ExternalLink';
 import { Link } from '@reach/router';
+import { Button } from 'antd';
 
 const Header = () => (
   <StaticQuery
@@ -40,7 +40,9 @@ const Header = () => (
               </h1>
               <br />
               <p>
-                <Link to="/activities/home">Sign in &nbsp;&#x2794;</Link>
+                <Link to="/activities/home">
+                  <Button type="primary">Get Started &nbsp;&#x2794;</Button>
+                </Link>
               </p>
             </Text>
           </Grid>
