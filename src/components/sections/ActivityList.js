@@ -6,6 +6,7 @@ import moment from 'moment';
 import { generateDisplayNameFromDuration } from '../../utils/durationMap';
 
 export function ActivityList(props) {
+  console.log(props.data);
   return (
     <List
       itemLayout="horizontal"
@@ -14,8 +15,15 @@ export function ActivityList(props) {
         <List.Item
           actions={[
             <Tag color={categoryMap(item.category)}>{item.category}</Tag>,
-            <Link key="list-loadmore-edit" to={`/activities/edit/${item.id}`}>
+            <Link key="list-more-edit" to={`/activities/edit/${item.id}`}>
               edit
+            </Link>,
+            <Link
+              key="list-more-timer"
+              to={`/activities/activity-clock`}
+              state={{ activityLength: item.duration, title: item.title }}
+            >
+              start timer
             </Link>,
           ]}
         >

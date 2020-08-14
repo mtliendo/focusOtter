@@ -1,6 +1,7 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { ActivityForm } from '../components/sections/ActivityForm';
 import { Typography, notification } from 'antd';
+import { generateDurationFromDisplayName } from '../utils/durationMap';
 
 function EditActivity({
   onEditActivity,
@@ -11,14 +12,12 @@ function EditActivity({
   const selectedActivity = activityList.find(
     activityItem => activityItem.id === activityID
   );
-  console.log({ activityList });
   const onFinish = values => {
     onEditActivity({
       id: activityID,
       ...values,
       time: null,
       timeStart: values.time.unix(),
-      duration: Number(values.duration),
     });
   };
 

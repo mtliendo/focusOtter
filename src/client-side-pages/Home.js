@@ -38,7 +38,7 @@ const dateReducer = (state, action) => {
 };
 
 const initialState = {
-  count: 0,
+  count: 1,
   displayDate: generateDisplayDate().displayDay,
   unixSeconds: generateDisplayDate().unixSeconds,
 };

@@ -6,6 +6,7 @@ import moment from 'moment';
 import {
   durationMap,
   generateDisplayNameFromDuration,
+  generateDurationFromDisplayName,
 } from '../../utils/durationMap';
 
 export const ActivityForm = ({
@@ -51,6 +52,16 @@ export const ActivityForm = ({
       message: onFinishMessage,
       description: `Changed Activity: ${form.getFieldValue('title')}`,
     });
+
+    //ensure that the duration is a number
+    if (typeof form.getFieldValue('duration') !== 'number') {
+      form.setFieldsValue({
+        duration: generateDurationFromDisplayName(
+          form.getFieldValue('duration')
+        ),
+      });
+    }
+
     onFinish(form.getFieldsValue());
 
     onReset();
@@ -114,7 +125,7 @@ export const ActivityForm = ({
             {durationMap.map(duration => (
               <Select.Option
                 key={`${duration.displayName}`}
-                value={`${duration.value}`}
+                value={`${duration.displayName}`}
               >
                 {duration.displayName}
               </Select.Option>

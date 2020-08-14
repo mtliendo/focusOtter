@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Router } from '@reach/router';
 import { Section, Container } from '@components/global';
 import styled from 'styled-components';
@@ -21,7 +21,7 @@ const initialActivityData = [
     title: 'This is your very first activity🎉',
     description:
       'This is a description of your first activity. To get started, go ahead and click the edit button ➡️',
-    timeStart: 1597208853,
+    timeStart: 1597209853,
     duration: 900000,
   },
   {
@@ -30,7 +30,7 @@ const initialActivityData = [
     title: 'This is your second activity🎉',
     description:
       'This is a description of your first activity. To get started, go ahead and click the edit button ➡️',
-    timeStart: 1597209853,
+    timeStart: 1597208853,
     duration: 7200000,
   },
 ];
@@ -39,6 +39,15 @@ const App = ({ navigate }) => {
   const [authState, setAuthState] = React.useState();
   const [user, setUser] = React.useState();
   const [activityData, setActivityData] = React.useState(initialActivityData);
+  const [sortedActivityData, setSortedActivityData] = React.useState(null);
+
+  useEffect(() => {
+    const sortedActivities = [...activityData].sort(
+      (a, b) => a.timeStart - b.timeStart
+    );
+
+    setSortedActivityData(sortedActivities);
+  }, [activityData]);
 
   React.useEffect(() => {
     return onAuthUIStateChange((nextAuthState, authData) => {
@@ -54,7 +63,9 @@ const App = ({ navigate }) => {
   const handleEditActivity = selectedActivity => {
     const updatedActivityData = activityData.map(activityItem => {
       return activityItem.id === selectedActivity.id
-        ? { ...selectedActivity }
+        ? {
+            ...selectedActivity,
+          }
         : activityItem;
     });
 
@@ -73,12 +84,12 @@ const App = ({ navigate }) => {
       <Section>
         <Container>
           <Router>
-            <Home path="/activities/home" data={activityData} />
+            <Home path="/activities/home" data={sortedActivityData} />
             <EditActivity
               path="/activities/edit/:activityID"
               onEditActivity={handleEditActivity}
               onDeleteActivity={handleDeleteActivity}
-              activityList={activityData}
+              activityList={sortedActivityData}
             />
             <NewActivity
               path="/activities/new"

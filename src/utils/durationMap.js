@@ -6,7 +6,7 @@ export const durationMap = [
   { displayName: '1 hour 15 minutes', value: 4500000 },
   { displayName: '1 hour 30 minutes', value: 5400000 },
   { displayName: '1 hour 45 minutes', value: 6300000 },
-  { displayName: '2 hours ', value: 7200000 },
+  { displayName: '2 hours', value: 7200000 },
 ];
 
 export const generateDisplayNameFromDuration = millseconds => {
@@ -15,4 +15,12 @@ export const generateDisplayNameFromDuration = millseconds => {
   );
 
   return foundItem && foundItem.displayName;
+};
+
+export const generateDurationFromDisplayName = displayName => {
+  const foundItem = durationMap.find(
+    durationItem => durationItem.displayName === displayName
+  );
+
+  return foundItem && foundItem.value;
 };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from 'antd';
-
+import moment from 'moment';
 import { ActivityForm } from '../components/sections/ActivityForm';
 
 function NewActivity({ onNewActivity }) {
