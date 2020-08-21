@@ -80,33 +80,31 @@ const generateDisplayDate = (count = 0) => {
   const dateInSeconds = moment(momentFormat, 'M-D-YYYY').unix();
 
   //get users
-  const displayDay = moment(day)
+  const displayDate = moment(day)
     .local()
     .format('dddd, MMMM Do YYYY');
 
   return {
     unixSeconds: dateInSeconds,
-    displayDay,
+    displayDate,
   };
 };
 
 const dateReducer = (state, action) => {
-  let generatedDate;
+  let generatedDateInfo;
   switch (action.type) {
     case 'incrementDay':
-      generatedDate = generateDisplayDate(state.count + 1);
+      generatedDateInfo = generateDisplayDate(state.count + 1);
 
       return {
         count: state.count + 1,
-        displayDate: generatedDate.displayDay,
-        unixSeconds: generatedDate.unixSeconds,
+        ...generatedDateInfo,
       };
     case 'decrementDay':
-      generatedDate = generateDisplayDate(state.count - 1);
+      generatedDateInfo = generateDisplayDate(state.count - 1);
       return {
         count: state.count - 1,
-        displayDate: generatedDate.displayDay,
-        unixSeconds: generatedDate.unixSeconds,
+        ...generatedDateInfo,
       };
     default:
       throw Error('no recognizeable action found');
@@ -115,7 +113,7 @@ const dateReducer = (state, action) => {
 
 const initialState = {
   count: 0,
-  displayDate: generateDisplayDate().displayDay,
+  displayDate: generateDisplayDate().displayDate,
   unixSeconds: generateDisplayDate().unixSeconds,
 };
 
@@ -123,8 +121,8 @@ const App = ({ navigate }) => {
   const [authState, setAuthState] = useState();
   const [user, setUser] = useState({});
   const [activityData, setActivityData] = useState(daysData);
+  const [selectedDayActivities, setSelectedDayActivities] = useState([]);
   const [dateState, dispatch] = useReducer(dateReducer, initialState);
-  const [selectedDayActivities, setSelectedDayActivities] = useState();
 
   useEffect(() => {
     return onAuthUIStateChange((nextAuthState, authData) => {
@@ -134,7 +132,6 @@ const App = ({ navigate }) => {
   }, []);
 
   useEffect(() => {
-    // todo: get today (in seconds)
     const todayInSecs = dateState.unixSeconds;
     // todo: get the day...fetch the data
     const foundItem = activityData.find(item => {
@@ -145,15 +142,51 @@ const App = ({ navigate }) => {
   }, [activityData, dateState.unixSeconds]);
 
   const handleNewActivity = newActivity => {
-    setActivityData([...activityData, newActivity]);
+    const selectedDayInSecs = dateState.unixSeconds;
+    let foundDayActivityInfo = activityData.find(item => {
+      return item.dayInSecs === selectedDayInSecs;
+    });
+
+    if (foundDayActivityInfo) {
+      foundDayActivityInfo = {
+        ...foundDayActivityInfo,
+        activities: [...selectedDayActivities, newActivity],
+      };
+      const updatedActivityData = activityData.map(activityItem => {
+        return activityItem.id === foundDayActivityInfo.id
+          ? foundDayActivityInfo
+          : activityItem;
+      });
+      setActivityData(updatedActivityData);
+    } else {
+      setActivityData(actData => [
+        ...actData,
+        {
+          id: 'jfdaa',
+          user: 'mtliendo3',
+          dayInSecs: selectedDayInSecs,
+          activities: [newActivity],
+        },
+      ]);
+    }
+
+    //todo: update the activityData with the new selectedDayActivities
   };
 
-  const handleEditActivity = selectedActivity => {
+  const handleEditActivity = updatedActivityList => {
+    const selectedDayInSecs = dateState.unixSeconds;
+    let foundDayActivityInfo = activityData.find(item => {
+      return item.dayInSecs === selectedDayInSecs;
+    });
+
+    foundDayActivityInfo = {
+      ...foundDayActivityInfo,
+      activities: updatedActivityList,
+    };
+
     const updatedActivityData = activityData.map(activityItem => {
-      return activityItem.id === selectedActivity.id
-        ? {
-            ...selectedActivity,
-          }
+      return activityItem.id === foundDayActivityInfo.id
+        ? foundDayActivityInfo
         : activityItem;
     });
 
@@ -162,20 +195,28 @@ const App = ({ navigate }) => {
   };
 
   const handleDeleteActivity = updatedActivityList => {
-    setActivityData(updatedActivityList);
+    const selectedDayInSecs = dateState.unixSeconds;
+    let foundDayActivityInfo = activityData.find(item => {
+      return item.dayInSecs === selectedDayInSecs;
+    });
+
+    foundDayActivityInfo = {
+      ...foundDayActivityInfo,
+      activities: updatedActivityList,
+    };
+
+    const updatedActivityData = activityData.map(activityItem => {
+      return activityItem.id === foundDayActivityInfo.id
+        ? foundDayActivityInfo
+        : activityItem;
+    });
+
+    setActivityData(updatedActivityData);
     navigate('/activities/home');
   };
 
   const handleDayChange = direction => {
-    if (direction !== 'decrement' && direction !== 'increment') {
-      console.log('no direction given in HOME route');
-    }
-    if (direction === 'decrement') {
-      dispatch({ type: 'decrementDay' });
-    }
-    if (direction === 'increment') {
-      dispatch({ type: 'incrementDay' });
-    }
+    dispatch({ type: direction });
   };
 
   return authState === AuthState.SignedIn && user ? (

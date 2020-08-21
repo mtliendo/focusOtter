@@ -8,16 +8,18 @@ function EditActivity({
   activityList,
   onDeleteActivity,
 }) {
-  const selectedActivity = activityList.find(
-    activityItem => activityItem.id === activityID
+  const selectedActivity = React.useRef(
+    activityList.find(activityItem => activityItem.id === activityID)
   );
   const onFinish = values => {
-    onEditActivity({
-      id: activityID,
-      ...values,
-      time: null,
-      timeStart: values.time.unix(),
-    });
+    const updatedActivityData = activityList.map(activityItem =>
+      activityItem.id === activityID
+        ? { ...activityItem, ...values }
+        : activityItem
+    );
+
+    console.log({ updatedActivityData });
+    onEditActivity(updatedActivityData);
   };
 
   const onDelete = () => {
@@ -37,7 +39,7 @@ function EditActivity({
         onFinish={onFinish}
         onFinishMessage="🚀 Activity edited!"
         onDelete={onDelete}
-        selectedActivity={selectedActivity}
+        selectedActivity={selectedActivity.current}
         isEditing
       />
     </>

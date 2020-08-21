@@ -24,11 +24,11 @@ const Home = ({ navigate, dailyActivityInfo, onDayChange, displayDate }) => {
           marginBottom: '3rem',
         }}
       >
-        <Button type="link" onClick={() => onDayChange('decrement')}>
+        <Button type="link" onClick={() => onDayChange('decrementDay')}>
           &larr;
         </Button>
         <Typography.Text strong>{displayDate}</Typography.Text>
-        <Button type="link" onClick={() => onDayChange('increment')}>
+        <Button type="link" onClick={() => onDayChange('incrementDay')}>
           &rarr;
         </Button>
       </section>
