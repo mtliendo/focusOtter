@@ -25,7 +25,7 @@ export const ActivityForm = ({
       description: selectedActivity.description,
       [isEditing && 'time']: moment.unix(selectedActivity.timeStart),
       duration: generateDisplayNameFromDuration(selectedActivity.duration),
-      category: selectedActivity.category,
+      categories: selectedActivity.categories,
     });
   }, [form, selectedActivity]);
   const layout = {
@@ -47,7 +47,8 @@ export const ActivityForm = ({
     form.resetFields();
   };
 
-  const handleOnFinish = () => {
+  const handleOnFinish = stuff => {
+    console.log('stuff', stuff);
     notification.success({
       message: onFinishMessage,
       description: `Changed Activity: ${form.getFieldValue('title')}`,
@@ -78,6 +79,7 @@ export const ActivityForm = ({
         <Form.Item
           name="title"
           label="Title"
+          len={10}
           rules={[
             {
               required: true,
@@ -133,11 +135,13 @@ export const ActivityForm = ({
           </Select>
         </Form.Item>
         <Form.Item
-          name="category"
+          name="categories"
           label="Category"
           rules={[
             {
               required: true,
+              type: 'array',
+              max: 4,
             },
           ]}
         >
@@ -145,6 +149,7 @@ export const ActivityForm = ({
             placeholder="Select a category"
             onChange={() => {}}
             allowClear
+            mode="multiple"
           >
             {activityCategories.map(categoryItem => (
               <Select.Option
@@ -155,28 +160,6 @@ export const ActivityForm = ({
               </Select.Option>
             ))}
           </Select>
-        </Form.Item>
-        <Form.Item
-          noStyle
-          shouldUpdate={(prevValues, currentValues) =>
-            prevValues.category !== currentValues.category
-          }
-        >
-          {({ getFieldValue }) =>
-            getFieldValue('category') === 'other' ? (
-              <Form.Item
-                name="customizeCategory"
-                label="Customize Category"
-                rules={[
-                  {
-                    required: true,
-                  },
-                ]}
-              >
-                <Input />
-              </Form.Item>
-            ) : null
-          }
         </Form.Item>
         <Form.Item {...tailLayout}>
           <Button type="primary" htmlType="submit">

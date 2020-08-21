@@ -1,7 +1,6 @@
 import React from 'react';
 import { ActivityForm } from '../components/sections/ActivityForm';
 import { Typography, notification } from 'antd';
-import { generateDurationFromDisplayName } from '../utils/durationMap';
 
 function EditActivity({
   onEditActivity,

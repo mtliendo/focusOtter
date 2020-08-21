@@ -33,11 +33,13 @@ const Navbar = props => {
       >
         Activities List
       </Link>
-      <Button
-        type="text"
-        style={{ color: 'black' }}
-        onClick={handleAuthButtonClick}
+      {/* <Link
+        style={{ textDecoration: 'none', color: 'black', marginLeft: '0.5em' }}
+        to="/activities/journal"
       >
+        Journal
+      </Link> */}
+      <Button type="text" onClick={handleAuthButtonClick}>
         {!props.user.username ? 'Sign In' : 'Sign Out'}
       </Button>
     </NavListWrapper>

@@ -30,6 +30,7 @@ export const NavListWrapper = styled.div`
         > ${NavItem} {
           margin: 0;
           margin-top: 0.75em;
+          margin-right: 0.5em;
         }
       `};
   }
