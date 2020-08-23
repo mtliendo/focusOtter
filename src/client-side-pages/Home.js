@@ -1,7 +1,7 @@
 import React from 'react';
 import { Typography, Divider, Button } from 'antd';
 import { ActivityList } from '../components/sections/ActivityList';
-import { PlusOutlined } from '@ant-design/icons';
+import { PlusOutlined, FormOutlined } from '@ant-design/icons';
 
 const Home = ({ navigate, dailyActivityInfo, onDayChange, displayDate }) => {
   return (
@@ -41,6 +41,15 @@ const Home = ({ navigate, dailyActivityInfo, onDayChange, displayDate }) => {
         >
           <PlusOutlined />
           New Activity
+        </Button>
+        <Button
+          type="default"
+          onClick={() => {
+            navigate('/activities/journal');
+          }}
+        >
+          <FormOutlined />
+          Log Daily Note
         </Button>
       </section>
       <Divider />

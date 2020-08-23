@@ -13,7 +13,7 @@ import EditActivity from '../client-side-pages/EditActivity';
 import PublicActivities from '../client-side-pages/PublicActivities';
 import ActivityClock from '../client-side-pages/ActivityClock';
 import NewActivity from '../client-side-pages/NewActivity';
-// import Journal from '../client-side-pages/Journal';
+import Journal from '../client-side-pages/Journal';
 const initialActivityData = [
   {
     id: '1',
@@ -62,12 +62,14 @@ const daysData = [
     user: 'mtliendo1',
     dayInSecs: 1597986000,
     activities: initialActivityData,
+    journalEntry: 'hello',
   },
   {
     id: 'jfda',
     user: 'mtliendo',
     dayInSecs: 1598072400,
     activities: initialActivityData2,
+    journalEntry: '',
   },
 ];
 
@@ -121,7 +123,7 @@ const App = ({ navigate }) => {
   const [authState, setAuthState] = useState();
   const [user, setUser] = useState({});
   const [activityData, setActivityData] = useState(daysData);
-  const [selectedDayActivities, setSelectedDayActivities] = useState([]);
+  const [currentDayItem, setCurrentDayItem] = useState({});
   const [dateState, dispatch] = useReducer(dateReducer, initialState);
 
   useEffect(() => {
@@ -138,7 +140,8 @@ const App = ({ navigate }) => {
       return item.dayInSecs === todayInSecs;
     });
 
-    setSelectedDayActivities(foundItem ? foundItem.activities : []);
+    // SelectedDayActivities(foundItem ? foundItem.activities : []);
+    setCurrentDayItem(foundItem ? foundItem : {});
   }, [activityData, dateState.unixSeconds]);
 
   const handleNewActivity = newActivity => {
@@ -150,7 +153,7 @@ const App = ({ navigate }) => {
     if (foundDayActivityInfo) {
       foundDayActivityInfo = {
         ...foundDayActivityInfo,
-        activities: [...selectedDayActivities, newActivity],
+        activities: [...currentDayItem.activities, newActivity],
       };
       const updatedActivityData = activityData.map(activityItem => {
         return activityItem.id === foundDayActivityInfo.id
@@ -219,6 +222,19 @@ const App = ({ navigate }) => {
     dispatch({ type: direction });
   };
 
+  const handleJournalDataUpdate = newJournalData => {
+    setActivityData(currActData => {
+      const todayInSecs = dateState.unixSeconds;
+      return currActData.map(currActItem => {
+        if ((currActItem.dayInSecs = todayInSecs)) {
+          currActItem.journalEntry = newJournalData;
+          return currActItem;
+        }
+        return currActItem;
+      });
+    });
+  };
+
   return authState === AuthState.SignedIn && user ? (
     <Layout>
       <Navbar user={user} />
@@ -227,7 +243,7 @@ const App = ({ navigate }) => {
           <Router>
             <Home
               path="/activities/home"
-              dailyActivityInfo={selectedDayActivities}
+              dailyActivityInfo={currentDayItem.activities}
               onDayChange={handleDayChange}
               displayDate={dateState.displayDate}
             />
@@ -235,14 +251,19 @@ const App = ({ navigate }) => {
               path="/activities/edit/:activityID"
               onEditActivity={handleEditActivity}
               onDeleteActivity={handleDeleteActivity}
-              activityList={selectedDayActivities}
+              activityList={currentDayItem.activities}
             />
             <NewActivity
               path="/activities/new"
               onNewActivity={handleNewActivity}
             />
             <PublicActivities path="/activities/public" />
-            {/* <Journal path="/activities/journal" /> */}
+            <Journal
+              path="/activities/journal"
+              displayDate={dateState.displayDate}
+              journalData={currentDayItem.journalEntry}
+              onJournalDataUpdate={handleJournalDataUpdate}
+            />
             <ActivityClock path="/activities/activity-clock" />
           </Router>
         </Container>
