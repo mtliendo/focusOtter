@@ -1,33 +1,50 @@
 import React from 'react';
 import { ActivityForm } from '../components/sections/ActivityForm';
-import { Typography, notification } from 'antd';
+import { Typography } from 'antd';
+import { API, graphqlOperation } from 'aws-amplify';
+import { getActivity } from '../graphql/queries';
+import { updateActivity, deleteActivity } from '../graphql/mutations';
 
 function EditActivity({
-  onEditActivity,
-  activityID,
-  activityList,
-  onDeleteActivity,
+  navigate, //provided by reach-router
+  activityID, //provided by reach-router
+  location,
 }) {
-  const selectedActivity = React.useRef(
-    activityList.find(activityItem => activityItem.id === activityID)
-  );
-  const onFinish = values => {
-    const updatedActivityData = activityList.map(activityItem =>
-      activityItem.id === activityID
-        ? { ...activityItem, ...values }
-        : activityItem
+  const [selectedActivity, setSelectedActivity] = React.useState({});
+  const { currentDayID } = location.state;
+  React.useEffect(() => {
+    API.graphql(graphqlOperation(getActivity, { id: activityID })).then(
+      results => {
+        console.log(results.data.getActivity);
+        setSelectedActivity(results.data.getActivity);
+      }
     );
+  }, [activityID]);
 
-    console.log({ updatedActivityData });
-    onEditActivity(updatedActivityData);
+  const handleEditActivity = updatedActivityItem => {
+    console.log({ updatedActivityItem });
+    API.graphql(
+      graphqlOperation(updateActivity, {
+        input: { ...updatedActivityItem, activityID: currentDayID },
+      })
+    ).then(result => console.log('updated! here is the result', result));
+
+    navigate('/activities/home');
+  };
+
+  const onFinish = values => {
+    const unixTime = values.time.unix();
+    delete values.time;
+    handleEditActivity({ ...values, timeStart: unixTime, id: activityID });
   };
 
   const onDelete = () => {
-    const updatedActivityList = activityList.filter(
-      activityItem => activityItem.id !== activityID
-    );
-    notification.success({ message: 'Activity deleted ✅' });
-    onDeleteActivity(updatedActivityList);
+    API.graphql(
+      graphqlOperation(deleteActivity, { input: { id: activityID } })
+    ).then(result => {
+      console.log('successfully deleted', result);
+      navigate('/activities/home');
+    });
   };
 
   return (
@@ -39,7 +56,7 @@ function EditActivity({
         onFinish={onFinish}
         onFinishMessage="🚀 Activity edited!"
         onDelete={onDelete}
-        selectedActivity={selectedActivity.current}
+        selectedActivity={selectedActivity}
         isEditing
       />
     </>

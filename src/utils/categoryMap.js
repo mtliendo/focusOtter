@@ -56,6 +56,10 @@ export const activityCategories = [
     color: '#ff782a',
     name: 'Indoors',
   },
+  {
+    color: '#ddcb22',
+    name: 'Cleaning',
+  },
 ].sort((a, b) => (a.name < b.name ? -1 : 1));
 
 export const categoryMap = (category = 'Other') => {

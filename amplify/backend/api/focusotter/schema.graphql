@@ -1,0 +1,26 @@
+type ActivityDay
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(
+    name: "byDayInSecs"
+    fields: ["daysInSecs"]
+    queryField: "activityByDaysInSecs"
+  ) {
+  id: ID!
+  daysInSecs: Int!
+  activities: [Activity]! @connection(keyName: "byActivity", fields: ["id"])
+  journalEntry: String
+}
+
+type Activity
+  @model
+  @auth(rules: [{ allow: owner }])
+  @key(name: "byActivity", fields: ["activityID", "timeStart"]) {
+  id: ID!
+  activityID: ID!
+  title: String!
+  description: String!
+  timeStart: Int!
+  duration: Int!
+  categories: [String!]!
+}

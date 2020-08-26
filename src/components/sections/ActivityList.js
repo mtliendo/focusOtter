@@ -9,7 +9,7 @@ export function ActivityList(props) {
   return (
     <List
       itemLayout="vertical"
-      dataSource={props.data}
+      dataSource={props.activities}
       renderItem={item => (
         <List.Item>
           <List.Item.Meta
@@ -55,7 +55,11 @@ export function ActivityList(props) {
               alignItems: 'center',
             }}
           >
-            <Link key="list-more-edit" to={`/activities/edit/${item.id}`}>
+            <Link
+              key="list-more-edit"
+              to={`/activities/edit/${item.id}`}
+              state={{ currentDayID: props.currentDayID }}
+            >
               edit
             </Link>
             <Divider type="vertical" />

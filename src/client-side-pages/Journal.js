@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useQuill } from 'react-quilljs';
-
+import { updateActivityDay } from '../graphql/mutations';
+import { API, graphqlOperation } from 'aws-amplify';
 import 'quill/dist/quill.snow.css';
 import { Button, Divider } from 'antd';
 
@@ -52,11 +53,16 @@ const MyEditor = ({ journalData, onJournalDataUpdate }) => {
   );
 };
 
-function Journal({
-  displayDate,
-  journalData = '{"ops":[{"insert":"Hey there!!!\\n"}]}',
-  onJournalDataUpdate,
-}) {
+function Journal({ location }) {
+  const { currentDayID, displayDate, journalData = '{}' } = location.state;
+  console.log({ journalData });
+  const handleJournalDataUpdate = newJournalData => {
+    API.graphql(
+      graphqlOperation(updateActivityDay, {
+        input: { id: currentDayID, journalEntry: newJournalData },
+      })
+    );
+  };
   return (
     <main>
       <section>
@@ -64,7 +70,7 @@ function Journal({
       </section>
       <MyEditor
         journalData={journalData}
-        onJournalDataUpdate={onJournalDataUpdate}
+        onJournalDataUpdate={handleJournalDataUpdate}
       />
     </main>
   );
