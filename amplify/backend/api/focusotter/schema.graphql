@@ -19,7 +19,7 @@ type Activity
   id: ID!
   activityID: ID!
   title: String!
-  description: String!
+  description: String
   timeStart: Int!
   duration: Int!
   categories: [String!]!
