@@ -1,3 +1,5 @@
+//categories for the activity creation dropdown
+
 export const activityCategories = [
   {
     color: 'magenta',
