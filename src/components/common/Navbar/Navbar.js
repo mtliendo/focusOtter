@@ -23,7 +23,9 @@ const Navbar = props => {
 
   const handleAuthButtonClick = async () => {
     console.log(props.user.username);
-    props.user.username ? await Auth.signOut().then(props.signOut) : navigate('/activities/home');    
+    props.user.username ? 
+      await Auth.signOut().then(props.signOut) : 
+      navigate('/activities/home');    
   };
 
   const getNavList = ({ mobile = false }) => (
