@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { Auth } from 'aws-amplify';
 import Layout from '@common/Layout';
 import Navbar from '@common/Navbar';
@@ -16,13 +16,17 @@ const IndexPage = () => {
     return user;
   };
 
+  function handleSignOut() {
+    fetchUser().then(setAuthUser);
+  }
+
   useEffect(() => {
     fetchUser().then(setAuthUser);
   }, []);
 
   return (
     <Layout>
-      <Navbar user={authUser} />
+      <Navbar user={authUser} signOut={handleSignOut}/>
       <Header />
       <About />
       <Footer />
