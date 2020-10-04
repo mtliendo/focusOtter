@@ -21,8 +21,10 @@ const Navbar = props => {
     setMobileMenuOpen(prevState => !prevState);
   };
 
-  const handleAuthButtonClick = async () => {
-    props.user.username ? await Auth.signOut() : navigate('/activities/home');
+  const handleAuthButtonClick = async () => {    
+    props.user.username ? 
+      await Auth.signOut().then(props.signOut) : 
+      navigate('/activities/home');    
   };
 
   const getNavList = ({ mobile = false }) => (

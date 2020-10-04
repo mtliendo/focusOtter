@@ -16,13 +16,17 @@ const IndexPage = () => {
     return user;
   };
 
+  function handleSignOut() {
+    fetchUser().then(setAuthUser);
+  }
+
   useEffect(() => {
     fetchUser().then(setAuthUser);
   }, []);
 
   return (
     <Layout>
-      <Navbar user={authUser} />
+      <Navbar user={authUser} signOut={handleSignOut}/>
       <Header />
       <About />
       <Footer />
